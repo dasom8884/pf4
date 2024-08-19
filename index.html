@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OHUI 오휘</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <!-- <link rel="stylesheet" href="css/normalize.css"> -->
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/title.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <!-- 폰트 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Athiti:wght@200;300;400;500;600;700&family=Merienda:wght@300..900&family=Noto+Serif+Display:ital,wght@0,100..900;1,100..900&family=Trirong:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    
+
+    <script src="js/jquery-3.7.1.js"></script>
+
+    <!-- 슬릭 -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script> 
+    <script>
+        $(document).ready(function(){
+
+            // 슬릭 진행바1 - 앞에배치
+            var $slider = $('.titleani');
+            var $progressBar = $('.progress-bar');
+            var slideCount = null;
+
+            $slider.on('init', function(event, slick){
+                slideCount = slick.slideCount;
+                setProgress(0);
+            });
+
+            $slider.on('beforeChange', function(event, slick, currentSlide, nextSlide){
+                setProgress(nextSlide);
+            });
+            $('.titleani').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: false,
+                autoplaySpeed: 2000,
+                dots: true,
+                infinite: true,
+                speed: 1500,
+                cssEase: 'ease-out',
+                arrows:true,
+                fade:false
+            });
+             // 슬릭 진행바2 -뒤에 배치
+            function setProgress(index) {
+                var calc = ((index + 1) / slideCount) * 100;
+                $progressBar.css('width', calc + '%');
+            }
+
+
+            $('.bestAni').slick({
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 2000,
+                dots: true,
+                infinite: true,
+                speed: 1000,
+                cssEase: 'ease-out',
+                arrows:true,
+                fade:false,
+                centerMode: true,
+                initialSlide: 1
+            });
+
+
+            $('.newAni').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 2000,
+                dots: false,
+                infinite: true,
+                speed: 500,
+                cssEase: 'ease-out',
+                arrows:false,
+                fade:false,
+                asNavFor: '.contAni'
+            });
+            $('.contAni').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 2000,
+                dots: true,
+                infinite: true,
+                speed: 500,
+                cssEase: 'ease-out',
+                arrows:false,
+                fade:false,
+                asNavFor: '.newAni',
+                customPaging: function(slider,index){
+                    var num = index + 1;
+                    return '<span class="dot">'+ 0 + num +'</span>';
+                }
+            });
+        });
+    </script>
+    <script>
+        $(function(){
+
+            // 페이지 숫자 표시
+            let num = $("#title .slick-dots li ").length;
+            let current = $("#title .slick-active").index();
+            $("#title .wprogress-bar").after('<span class="number"><strong>'+current+' </strong> '+num+'</span>');
+            $("#title .slick-next,#place .slick-prev").click(function(){
+                let current = $("#title .slick-active").index();
+                $("#title span.number strong").text(current);
+            });//클릭 말고 자동으로 넘어갈 수 있는 방법??
+        });
+    </script>
+
+
+    <!-- 제이쿼리 -->
+     <script>
+        $(document).ready(function(){
+            //스크롤하면 메뉴
+            // var menuT = $("header").offset().top;
+            // $(window).scroll(function(){
+            //     console.log($(window).scrollTop());
+            //         $("header").addClass("fixed");
+            //         $("header div.wrap nav").addClass("header-wrap");
+            //         $("header div.wrap nav ul.gnb li a,header div.wrap nav ul.enb li a").addClass("header-fix-a");
+            // });
+            var scrollTop = $(window).scrollTop();
+            var headerheight = $('header').offset().top;
+            $(window).scroll(function(){
+                if(scrollTop>headerheight){
+                    $("header").addClass("fixed");
+                    $("header div.wrap nav").addClass("header-wrap");
+                    $("header div.wrap nav ul.gnb li a,header div.wrap nav ul.enb li a").addClass("header-fix-a");
+                }else{
+                    $("header").removeClass("fixed");
+                    $("header div.wrap nav").removeClass("header-wrap");
+                    $("header div.wrap nav ul.gnb li a,header div.wrap nav ul.enb li a").removeClass("header-fix-a");
+                }
+            });
+
+            // 서브메뉴
+            $("header div.wrap nav ul.gnb li .submenu").hide();
+            $("header div.wrap nav ul.gnb li").mouseover(function(){
+                $(this).find(".submenu").stop().slideDown();
+            });
+            $("header div.wrap nav ul.gnb li").mouseout(function(){
+                $(this).find(".submenu").stop().slideUp();
+            });
+
+            //탑버튼
+            $("button.top").click(function(){
+                $("html,body").animate({scrollTop:0},500);
+            });
+
+
+        });
+     </script>
+
+     
+     <!-- AOS -->
+     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+     <script>
+        $(document).ready(function(){
+            AOS.init();
+        });
+     </script>
+    
+</head>
+<body>
+    <!-- 상단영역 -->
+    <header>
+        <div class="wrap paddingB30 paddingT30">
+            <nav class="flex">
+                <h1>
+                    <a href="" class="block"><img src="img/logo_w.svg" alt="로고이미지"></a>
+                </h1>
+                <ul class="gnb flex">
+                    <li><a href="" class="block">BRAND</a>
+                     <ul class="submenu">
+                        <li><a href="" class="block">OHUI STORY<img src="img/brand-sub1.png" alt=""></a></li>
+                        <li><a href="" class="block">GALLERY<img src="img/brand-sub2.png" alt=""></a></li>
+                        <li><a href="" class="block">NEWS<img src="img/brand-sub3.png" alt=""></a></li>
+                        <li><a href="" class="block">THE FIRST MAISON<img src="img/brand-sub4.png" alt=""></a></li>
+                     </ul></li>
+                    <li><a href="" class="block">BEST</a></li>
+                    <li><a href="" class="block">SKIN CARE</a>
+                        <div class="submenu flex">
+                            <ul>
+                                <li><a href="" class="bold block">제품 유형별</a></li>
+                                <li><a href="" class="block">클렌징</a></li>
+                                <li><a href="" class="block">스킨소프너</a></li>
+                                <li><a href="" class="block">에센스/세럼</a></li>
+                                <li><a href="" class="block">앰플</a></li>
+                                <li><a href="" class="block">에멀전</a></li>
+                                <li><a href="" class="block">크림</a></li>
+                                <li><a href="" class="block">아이크림</a></li>
+                                <li><a href="" class="block">스페셜케어</a></li>
+                                <li><a href="" class="block">선케어</a></li>
+                            </ul>
+                            <ul>
+                                <li><a href="" class="bold block">제품 라인별</a></li>
+                                <li><a href="" class="block">더 퍼스트 제너츄어</a></li>
+                                <li><a href="" class="block">프라임 어드밴서</a></li>
+                                <li><a href="" class="block">미라클 토닝</a></li>
+                                <li><a href="" class="block">미라클 모이스처</a></li>
+                                <li><a href="" class="block">미라클 아쿠아</a></li>
+                                <li><a href="" class="block">에이지 리커버리</a></li>
+                                <li><a href="" class="block">익스트림 화이트</a></li>
+                                <li><a href="" class="block">데이쉴드</a></li>
+                                <li><a href="" class="block">더 퍼스트 제너츄어 포맨</a></li>
+                                <li><a href="" class="block">마이스터 포맨</a></li>
+                            </ul>
+                            <ul>
+                                <li><a href="" class="block"><img src="img/skin-sub1.jpg" alt="">더 퍼스트 제너츄어</a></li>
+                                <li><a href="" class="block"><img src="img/skin-sub2.jpg" alt="">프라임 어드밴서</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a href="" class="block">MAKE UP</a>
+                        <div class="submenu flex">
+                            <ul>
+                                <li><a href="" class="bold block">제품 유형별</a></li>
+                                <li><a href="" class="block">쿠션</a></li>
+                                <li><a href="" class="block">베이스</a></li>
+                                <li><a href="" class="block">립</a></li>
+                                <li><a href="" class="block">아이</a></li>
+                            </ul>
+                            <ul>
+                                <li><a href="" class="bold block">제품 라인별</a></li>
+                                <li><a href="" class="block">더 퍼스트 제너츄어</a></li>
+                                <li><a href="" class="block">얼티밋 메이크업</a></li>
+                                <li><a href="" class="block">루즈 리얼</a></li>
+                                <li><a href="" class="block">리얼 컬러</a></li>
+                                <li><a href="" class="block">더 퍼스트 제너츄어 포맨</a></li>
+                            </ul>
+                            <ul>
+                                <li><a href="" class="block"><img src="img/mk-sub1.jpg" alt="">더 퍼스트 제너츄어</a></li>
+                                <li><a href="" class="block"><img src="img/mk-sub2.jpg" alt="">얼티밋메이크업</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a href="" class="block">SPECIAL SET</a></li>
+                    <li><a href="" class="block">EVENT</a></li>
+                </ul>
+                <ul class="enb flex">
+                    <li><a href="" class="block sm14">Login</a></li>
+                    <li><a href="" class="block sm14">MY PAGE</a></li>
+                    <li><a href="" class="block sm14">Cart(0)</a></li>
+                    <li><a href="" class="block sm14">STORE</a></li>
+                    <li><a href="" class="block sm14">Search</a></li>
+                    <li><a href="" class="block sm14">검색</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <!-- 타이틀영역 -->
+    <div id="title">
+        <div class="titleani wrap">
+            <div class="slider">
+                <img src="img/title1.png" alt="">
+                <div class="titletext">
+                    <h2 class="h1">
+                        핑크빛 보습 장벽케어 
+                        <span class="block"></span>
+                        미라클 모이스처 
+                    </h2>
+                    <p class="h5">
+                        세라마이드 부스팅 크림 1+1
+                        <span class="block"></span>
+                        미라클 5종 미니어처 키트 1:1 증정
+                    </p>
+                    <a href="" class="block h5">READ MORE</a>
+                </div>
+            </div>
+            <div class="slider">
+                <img src="img/title2.png" alt="">
+                <div class="titletext">
+                    <h2 class="h1">
+                        에이지 리커버리 
+                        <span class="block"></span>
+                        콜라겐 안티에이징 케어
+                    </h2>
+                    <p class="h5">
+                        에이지 리커버리 3종 미니어처 키트 1:1 증정
+                    </p>
+                    <a href="" class="block h5">READ MORE</a>
+                </div>
+            </div>
+            <div class="slider">
+                <img src="img/title3.png" alt="">
+                <div class="titletext">
+                    <h2 class="h1">
+                        피부나이를 지우다
+                        <span class="block"></span>
+                        DE-AGING 프라임 어드밴서  
+                    </h2>
+                    <p class="h5">
+                        프라임AD 디에이징 2종 미니어처 키트 1:1 증정
+                    </p>
+                    <a href="" class="block h5">READ MORE</a>
+                </div>
+            </div>
+            <div class="slider">
+                <img src="img/title4.png" alt="">
+                <div class="titletext">
+                    <h2 class="h1">
+                        오휘 공식몰 단독구매 혜택
+                    </h2>
+                    <p class="h5">
+                        구매 금액별 최대 6만원 정품 증정까지
+                    </p>
+                    <a href="" class="block h5">READ MORE</a>
+                </div>
+            </div>
+            <div class="slider">
+                <img src="img/title5.png" alt="">
+                <div class="titletext">
+                    <h2 class="h1">
+                        이달의 고객혜택
+                    </h2>
+                    <p class="h5">
+                        새롭게 바뀌는 고객 혜택을 확인하세요
+                    </p>
+                    <a href="" class="block h5">READ MORE</a>
+                </div>
+            </div>
+            <div class="slider">
+                <img src="img/title6.png" alt="">
+                <div class="titletext">
+                    <h2 class="h1">
+                        G-POINT LAUNCHING EVENT
+                    </h2>
+                    <p class="h5">
+                        L-CARE 회원이라면 누구나 도전 가능!
+                        <span class="block"></span>
+                        퀴즈풀고 1등 100만 G포인트 당첨 도전!
+                    </p>
+                    <a href="" class="block h5">READ MORE</a>
+                </div>
+            </div>
+        </div>
+        <div class="wprogress-bar">
+            <div class="progress-bar"></div>
+        </div>
+    </div>
+    <!-- 메인영역 -->
+    <main>
+        <!-- BEST -->
+       <section id="best">
+        <div class="wrap flex paddingB50 paddingT50">
+            <div class="titletext"  data-aos='fade-up' data-aos-offset="100" data-aos-duration="1000">
+                <h2 class="h2" >BEST</h2>
+                <a href="" class="block">더보기<span></span></a>
+            </div>
+            <ul class="bestAni" data-aos='fade-up'>
+                <li>
+                    <a href="" class="block">
+                        <img src="img/best1.png" alt="">
+                        <h3 class="h6 bold">미라클 모이스처 립세린</h3>
+                        <p class="sm13">미모세린 | 12시간보습 | 쉬폰세라마이드</p>
+                        <strong><span>10%</span>27,000원 <span>30,000원</span></strong>
+                        <img src="img/best1-2.jpg" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="block">
+                        <img src="img/best2.png" alt="">
+                        <h3 class="h6 bold">얼티밋 핏 롱웨어 진쿠션 15g(본품)+15g(리필)</h3>
+                        <p class="sm13">밀착결광 | 진청쿠션 | 36시간커버지속</p>
+                        <strong>60,000원</strong>
+                        <img src="img/best2-2.png" alt="">
+                        <div class="colorchips">
+                            <span class="color"></span>
+                            <span class="color"></span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="block">
+                        <img src="img/best3.png" alt="">
+                        <h3 class="h6 bold">미라클 토닝 글로우 세럼 50ml</h3>
+                        <p class="sm13">물광토닝세럼 | 톤결빛케어 | 젤리텍스쳐</p>
+                        <strong>75,000원</strong>
+                        <img src="img/best3-2.png" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="block">
+                        <img src="img/best4.png" alt="">
+                        <h3 class="h6 bold">얼티밋 핏 롱웨어 진쿠션 리필 15g(리필)</h3>
+                        <p class="sm13">밀착결광 | 진청쿠션 | 36시간커버지속</p>
+                        <strong>30,000원</strong>
+                        <img src="img/best2-2.png" alt="">
+                        <div class="colorchips">
+                            <span class="color"></span>
+                            <span class="color"></span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="block">
+                        <img src="img/best5.png" alt="">
+                        <h3 class="h6 bold">프라임 어드밴서 코어 트라이얼 기획</h3>
+                        <p class="sm13">코어탄력키트 | 앰플레이어링 | 토탈안티에이징</p>
+                        <strong><span>15%</span>63,750원<span>75,000원</span></strong>
+                        <img src="img/best5-2.jpg" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="block">
+                        <img src="img/best6.png" alt="">
+                        <h3 class="h6 bold">미라클 모이스처 핑크 베리어 2종 베이직 기획</h3>
+                        <p class="sm13">보습2종세트 | 쉬폰세라마이드 | 보습장벽케어</p>
+                        <strong><span>20%</span>56,000원<span>70,000원</span></strong>
+                        <img src="img/best6-2.jpg" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="block">
+                        <img src="img/best7.png" alt="">
+                        <h3 class="h6 bold">얼티밋 핏 롱웨어 진쿠션 핑크에디션</h3>
+                        <p class="sm13">#밀착결광 #진청쿠션 #36시간커버지속</p>
+                        <strong>37,000원</strong>
+                        <img src="img/best7.png" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="block">
+                        <img src="img/best8.png" alt="">
+                        <h3 class="h6 bold">미라클 토닝 글로우 세럼 기획</h3>
+                        <p class="sm13">물광토닝세럼 | 톤결빛케어 | 젤리텍스쳐</p>
+                        <strong>90,000원</strong>
+                        <img src="img/best3-2.png" alt="">
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+       </section>
+       <!-- NEW -->
+        <section id="new">
+            <div class="wrap paddingT50">
+                <h2 class="h2">NEW</h2>
+                <div class="banner newAni">
+                    <a href=""><img src="img/banner1.png" alt=""></a>    
+                    <a href=""><img src="img/banner2.png" alt=""></a>    
+                    <a href=""><img src="img/banner3.jpg" alt=""></a>    
+                </div>
+                <div class="newcont contAni">  
+                    <a href="" class="block">
+                        <div class="newtext">
+                            <h3 class="h1">BE MY FIRST</h3>
+                            <div class="newtext-1">
+                                <img src="img/banner1-1.png" alt="">
+                                <p>
+                                    <strong>BE MY FIRST</strong>
+                                    <span>새로워진 더 퍼스트 제너츄어 5종으로<br>구성된 컴팩트 기획세트</span>
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="" class="block">
+                        <div class="newtext">
+                            <h3 class="h1">FLOWER CUSHION</h3>
+                            <div class="newtext-1">
+                                <img src="img/banner2-1.png" alt="">
+                                <p>
+                                    <strong>리프팅쿠션 플라워에디션</strong>
+                                    <span>화사한 봄 피어나는 블루밍<br>플라워 쿠션</span>
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="" class="block">
+                        <div class="newtext">
+                            <h3 class="h1">PERFECT SUN</h3>
+                            <div class="newtext-1">
+                                <img src="img/banner3-1.jpg" alt="">
+                                <p>
+                                    <strong>데이쉴드 퍼펙트 선</strong>
+                                    <span>새로워진 디자인의<br>오휘 베스트셀러 선크림</span>
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div> 
+
+        </section>
+       <!-- mainbanner -->
+        <section id="m-banner">
+            <img src="img/main-banner.jpg" alt="">
+            <a href="" class="block">
+                <div class="wrap" data-aos='fade-up'>
+                    <h2>De-Aging Solution Brand</h2>
+                    <img src="img/bannerlogo.svg" alt="">
+                    <button>더보기<span></span></button>
+                </div>
+             </a>
+        </section>
+       <!-- 비디오 -->
+        <section id="video">
+            <a href="" class="block">
+                <img src="img/main_video.webp" alt="">
+            </a>
+        </section>
+    </main>
+    <!-- 하단영역 -->
+    <footer>   
+        <div class="wrap grid paddingT50 paddingB50" data-aos='fade-up' data-aos-offset="100" data-aos-duration="1000">
+            <h2 class="hide">주문취소배송문의</h2>
+            <div class="insta">
+                <h3 class="h4">INSTAGRAM</h1>
+                <span>@ OHUI.official</span>
+            </div>
+            <ul class="fnb flex">
+                <li><a href="" class="block">BRAND</a></li>
+                <li><a href="" class="block">BEST</a></li>
+                <li><a href="" class="block">SKIN CARE</a></li>
+                <li><a href="" class="block">MAKE-UP</a></li>
+                <li><a href="" class="block">SPECIAL SET</a></li>
+                <li><a href="" class="block">EVENT</a></li>
+            </ul>
+            <ul class="sns flex">
+                <li><a href="" class="block">인스타그램</a></li>
+                <li><a href="" class="block">카카오 채널</a></li>
+                <li><a href="" class="block"> 유튜브</a></li>
+            </ul>
+            <ul class="fnb2 flex">
+                <li><a href="">주문/배송 조회</a></li>
+                <li><a href="">문의하기</a></li>
+                <li><a href="">공지사항</a></li>
+                <li><a href="">매장안내</a></li>
+            </ul>
+            <ul class="lan flex">
+                <li><a href="">KR</a></li>
+                <li><a href="">CN</a></li>
+            </ul>
+            <ul class="footer-info flex">
+                <li><a href="">사업자정보확인</a></li>
+                <li><a href="">개인정보처리방침</a></li>
+                <li><a href="">이용약관</a></li>
+            </ul>
+            <address class="sm14">
+                (주) 엘지생활건강 <br>
+
+                    대표 : 이정애  <span>사업자등록번호 : 107-81-98143</span> <br>
+
+                    주소 : 서울특별시 종로구 신문로2가 LG광화문빌딩 <br>
+
+                    통신판매업 신고 : 2011-서울종로-01902011-서울종로-0190 [사업자정보확인] 
+                <span>개인정보보호책임자 : 강일만(privacy@lghnh.com)</span>
+                <p>Copyright © ohui. All rights reserved.</p>
+            </address>
+            
+            <div class="ask">
+                <div class="ask-text">
+                    <span>주문</span>
+                    <span>취소</span>
+                    <span>배송문의</span>
+                </div>
+                <strong>080-850-4010</strong>
+                <div class="ask-text2">
+                    <p>평일 09:00 ~ 18:00 (점심 12:00 ~ 13:00)</p>
+                    <p>토요일, 일요일, 공휴일 휴무</p>
+                </div>
+            </div>
+            <div class="ask2">
+                <div class="ask-text">
+                    <span>제품상담</span>
+                    <span>품질불편</span>
+                </div>
+                <strong>080-023-7007</strong>
+                <div class="ask-text2">
+                    <p>평일 09:00 ~ 18:00 (점심 12:00 ~ 13:00)</p>
+                    <p>토요일, 일요일, 공휴일 휴무</p>
+                </div>
+        </div>
+    </footer>
+    <!-- top -->
+     <button class="top">위로</button>
+</body>
+</html>
